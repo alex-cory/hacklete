@@ -20,7 +20,7 @@
     width: 200px;
     height: 200px;
     position: absolute;
-    top: 20%;
+    top: 100px;
     left: 5%;
     border-radius:50%;
 }
@@ -33,7 +33,13 @@
     overflow-x:scroll;
     white-space: nowrap;
     margin: 0 auto;
-    top: 40%;
+    top: 240px;
+}
+#linkedinButton{
+    width: 280px;
+    top: 500px;
+    margin: 0 auto;
+    text-align: center;
 }
 .cell{
     width: 250px;

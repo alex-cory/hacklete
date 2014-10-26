@@ -7,18 +7,31 @@
     <script type="text/javascript" src="js/bootstrap.js"></script>
     <script type="text/javascript" src="js/jasny-bootstrap.js"></script>
     <script type="text/javascript" src="js/offcanvas.js"></script>
+
     <script src="//www.parsecdn.com/js/parse-1.3.1.min.js"></script>
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
     <link href="css/jasny-bootstrap.css" rel="stylesheet">
+
     <link href="css/stylesheet.css">
     <title></title>
     <script>
         function redirect(){
             if (localStorage.getItem("access_token") == null){
                 window.location = "login.html";
+            }else{
+                init();
             }
         }
+        function init(){
+            Parse.initialize("dl4KeiNTF4IV6Htt40HsmAoT5Fh1XMtSX70uVffv", "umqTJviqVEAMKlUutOQm5Vjvy9cuSPtQHZJBYgUa");
 
+        }
+        function httpGet(theUrl) {
+            var xmlHttp = new XMLHttpRequest();
+            xmlHttp.open( "GET", theUrl, false );
+            xmlHttp.send( null );
+            return xmlHttp.responseText;
+        }
     </script>
 
 </head>
@@ -38,9 +51,19 @@
             <li class="active"><a href="./">Home</a></li>
             <li><a href="./profile.html">Profile</a></li>
             <li><a href="./notifications.html">Notifications</a></li>
-            <li><a href="">Help</a></li>
+            <li><a href="./friends.html">Friends</a> </li>
+
         </ul>
+        <div class="col-sm-3 col-md-3 pull-right">
+            <form class="navbar-form navbar-left" role="search" style=" position: relative;right:70px; width: 300px">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Search">
+                </div>
+                <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
+            </form>
+        </div>
     </div>
 </div>
+
 </body>
 </html>

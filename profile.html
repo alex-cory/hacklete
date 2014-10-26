@@ -7,13 +7,19 @@
     <script type="text/javascript" src="js/bootstrap.js"></script>
     <script type="text/javascript" src="js/jasny-bootstrap.js"></script>
     <script type="text/javascript" src="js/offcanvas.js"></script>
+    <script type="text/javascript" src="js/oauth.js"></script>
+    <link rel="stylesheet" href="css/sweet-alert.css">
+    <script type="text/javascript" src="js/sweet-alert.js"></script>
     <script src="//www.parsecdn.com/js/parse-1.3.1.min.js"></script>
+    <link rel="stylesheet" href="css/bootstrap-social.css">
+    <link rel="stylesheet" href="css/font-awesome.css">
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
     <link href="css/jasny-bootstrap.css" rel="stylesheet">
     <link href="css/stylesheet.css" rel="stylesheet">
     <title></title>
     <script>
         var user;
+
         function httpGet(theUrl) {
             var xmlHttp = new XMLHttpRequest();
             xmlHttp.open( "GET", theUrl, false );
@@ -21,15 +27,21 @@
             return xmlHttp.responseText;
         }
         function getUserObject(){
+            OAuth.initialize("_RFcYhs1OE9qj9Qy9fwf4NDbtvg");
+            Parse.initialize("dl4KeiNTF4IV6Htt40HsmAoT5Fh1XMtSX70uVffv", "umqTJviqVEAMKlUutOQm5Vjvy9cuSPtQHZJBYgUa");
             var object = httpGet('https://api.github.com/user?access_token=' + localStorage.getItem("access_token"));
             user = JSON.parse(object);
             document.getElementById("userImage").src = user.avatar_url;
+
+            //var userObj = httpGet('https://api.linkedin.com/v1/people/~;key=' + '75itepbruonku3&amp;'+ 'authtoken=' + localStorage.getItem("linkedin_access_token") + '&amp;authType=name&amp;trk=api*a119686*s128146*');
+            //var userLI = JSON.parse(userObj);
             getRepos();
         }
         function getRepos(){
             var repoObjs = httpGet('https://api.github.com/user/repos?access_token=' + localStorage.getItem("access_token"));
             var repos = JSON.parse(repoObjs);
             for (i = 0; i < repos.length; i++){
+
                 var div = document.createElement('div');
                 div.className = 'cell';
                 document.getElementById("scrolly").appendChild(div);
@@ -43,7 +55,37 @@
                 lang.innerHTML = repos[i].language;
                 div.appendChild(lang);
 
+                var Repos = Parse.Object.extend("Repos");
+                var newrepo = new Repos();
+                newrepo.set("RepoId", repos[i].id);
+                newrepo.set("Url", repos[i].url);
+                newrepo.set("Name", repos[i].full_name);
+                newrepo.set("Owner", repos[i].owner);
+                var person = repos[i].owner;
+                newrepo.set("OwnerName", person.login);
+                newrepo.save(null, {
+                    success: function (gameScore) {
+                    },
+                    error: function (gameScore, error) {
+                    }
+                });
             }
+        }
+        function signInLI() {
+            OAuth.popup('linkedin2', function (error, success) {
+                sweetAlertInitialize();
+                console.log(success);
+                if (success) {
+                    localStorage.setItem("linkedin_access_token", success.access_token);
+                    swal({title: "Connected", type: "success"},
+                            function(isConfirm){
+                                location.reload();
+                            });
+                }
+                if(error){
+                    swal({title: error.toLocaleString(), timer: 2000, type: "error"});
+                }
+            });
         }
     </script>
 </head>
@@ -65,10 +107,10 @@
                 <li class="active"><a href="">Profile</a></li>
                 <li><a href="./notifications.html">Notifications</a></li>
                 <li><a href="./friends.html">Friends</a> </li>
-                <li><a href="">Help</a></li>
+
             </ul>
             <div class="col-sm-3 col-md-3 pull-right">
-                <form class="navbar-form navbar-left" role="search" style=" position: relative;right:70px; width: 300px">
+                <form class="navbar-form navbar-left" role="search" style=" position:relative; width: 300px">
                     <div class="form-group">
                         <input type="text" class="form-control" placeholder="Search">
                     </div>
@@ -80,5 +122,10 @@
     <div id='scrolly'>
     </div>
     <img id="userImage" src="">
+
+    <a id="linkedinButton" class="btn btn-block btn-social btn-linkedin" onclick="signInLI()">
+        <i class="fa fa-linkedin"></i> Add Experience from LinkedIn
+    </a>
+
 </body>
 </html>
