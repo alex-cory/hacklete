@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" href="css/bootstrap-social.css">
+    <link rel="stylesheet" href="css/font-awesome.css">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/stylesheet.css">
+    <link rel="stylesheet" href="css/sweet-alert.css">
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/angular.js"></script>
+    <script type="text/javascript" src="js/bootstrap.js"></script>
+    <script type="text/javascript" src="js/oauth.js"></script>
+    <script type="text/javascript" src="js/sweet-alert.js"></script>
+
+    <script>
+        function init(){
+            OAuth.initialize("kjSCzpLrdp0-iZRlyBV8K4gNGrs")
+        }
+        function signInGH(){
+            OAuth.popup('github', function(error, success){
+                sweetAlertInitialize()
+                if(success){
+                    swal({title: "Connected", type: "success"},
+                    function(isConfirm){
+                        console.log(success.access_token);
+
+                    });
+                }
+                if(error){
+                    swal({title: error.toLocaleString(), timer: 2000, type: "error"});
+                }
+            });
+        }
+    </script>
+</head>
+<body onload="init()">
+    <div id = "modal">
+        <img src="logo.png" style="text-align: center; max-width: 100%; max-height: 100%;">
+        <br>
+        <a id="githubButton" class="btn btn-block btn-social btn-github" onclick="signInGH()">
+            <i class="fa fa-github"></i> Sign in with GitHub
+        </a>
+    </div>
+</body>
+</html>
