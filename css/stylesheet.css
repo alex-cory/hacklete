@@ -57,13 +57,12 @@
 .lang{
     width: 250px;
     height: 50px;
-    text-align: left;
+    text-align: center;
     font-family: "Helvetica Neue Light", "HelveticaNeue-Light", "Helvetica Neue", Calibri, Helvetica, Arial;
     font-style: oblique;
     font-size: 30px;
     color: #808080;
-    position:relative;
+    position:absolute;
     top: 35%;
     padding-right: 10px;
-    text-align: center;
 }

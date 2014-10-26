@@ -37,15 +37,18 @@
                 banner.className = 'banner';
                 banner.innerHTML = repos[i].name;
                 div.appendChild(banner);
+
                 var lang = document.createElement('div');
                 lang.className = 'lang';
                 lang.innerHTML = repos[i].language;
                 div.appendChild(lang);
+
             }
         }
     </script>
 </head>
 <body onload="getUserObject()">
+
     <div class="navbar navbar-fixed-top navbar-default">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="offcanvas" data-target=".navbar-offcanvas" data-canvas="body">
@@ -61,8 +64,17 @@
                 <li><a href="./index.html">Home</a></li>
                 <li class="active"><a href="">Profile</a></li>
                 <li><a href="./notifications.html">Notifications</a></li>
+                <li><a href="./friends.html">Friends</a> </li>
                 <li><a href="">Help</a></li>
             </ul>
+            <div class="col-sm-3 col-md-3 pull-right">
+                <form class="navbar-form navbar-left" role="search" style=" position: relative;right:70px; width: 300px">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search">
+                    </div>
+                    <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
+                </form>
+            </div>
         </div>
     </div>
     <div id='scrolly'>
