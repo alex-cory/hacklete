@@ -13,26 +13,89 @@
     <script type="text/javascript" src="js/bootstrap.js"></script>
     <script type="text/javascript" src="js/oauth.js"></script>
     <script type="text/javascript" src="js/sweet-alert.js"></script>
+    <script src="//www.parsecdn.com/js/parse-1.3.1.min.js"></script>
 
     <script>
         function init(){
-            OAuth.initialize("kjSCzpLrdp0-iZRlyBV8K4gNGrs")
+            OAuth.initialize("kjSCzpLrdp0-iZRlyBV8K4gNGrs");
+            Parse.initialize("dl4KeiNTF4IV6Htt40HsmAoT5Fh1XMtSX70uVffv", "umqTJviqVEAMKlUutOQm5Vjvy9cuSPtQHZJBYgUa");
+
         }
+
+        function httpGet(theUrl) {
+            var xmlHttp = new XMLHttpRequest();
+            xmlHttp.open( "GET", theUrl, false );
+            xmlHttp.send( null );
+            return xmlHttp.responseText;
+        }
+
         function signInGH(){
             OAuth.popup('github', function(error, success){
-                sweetAlertInitialize()
+                sweetAlertInitialize();
                 if(success){
-                    swal({title: "Connected", type: "success"},
-                    function(isConfirm){
-                        console.log(success.access_token);
+                    localStorage.setItem("access_token", success.access_token);
+                    var user;
+                    var json;
+                    var getUser = function(){
+                        user = httpGet('https://api.github.com/user?access_token=' + success.access_token);
+                    };
+                    var doTheRest = function(){
+                        var query = new Parse.Query(Parse.User);
+                        query.equalTo("username", json.login);
+                        query.find({
+                            success: function(parseUser){
+                                console.log(parseUser);
+                                if(parseUser.length > 0){
+                                    Parse.User.logIn(json.login, "cookies", {
+                                        success: function(resultingUser) {
+                                            // Do stuff after successful login.
+                                            localStorage.setItem("parse_id", resultingUser.id);
+                                            swal({title: "Connected", type: "success"},
+                                                    function(isConfirm){
+                                                        window.location = "index.html";
+                                                    });
+                                        },
+                                        error: function(user, error) {
+                                            // The login failed. Check error to see why.
+                                            swal({title: error.toString(), timer: 2000, type: "error"});
+                                        }
+                                    });
 
-                    });
+                                }else{
+                                    var newUser = new Parse.User();
+                                    newUser.set("username", json.login);
+                                    newUser.set("password", "cookies");
+                                    newUser.set("email", json.email);
+                                    newUser.signUp(null, {
+                                        success:function(resultingUser){
+                                            localStorage.setItem("parse_id", resultingUser.id);
+                                            swal({title: "Connected", type: "success"},
+                                                    function(isConfirm){
+                                                        window.location = "index.html";
+                                                    });
+                                        },
+                                        error:function(result, error){
+                                            swal({title: error.toLocaleString(), timer: 2000, type: "error"});
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    };
+
+                    try{
+                        getUser();
+                    }finally{
+                        json = JSON.parse(user);
+                        doTheRest();
+                    }
                 }
                 if(error){
                     swal({title: error.toLocaleString(), timer: 2000, type: "error"});
                 }
             });
         }
+
     </script>
 </head>
 <body onload="init()">
