@@ -1,0 +1,21 @@
+{
+  "groups": {
+    "default": {
+      "packages": [
+        "bower_components/angular-animate/package.json",
+        "bower_components/angular-cookies/package.json",
+        "bower_components/angular-mocks/package.json",
+        "bower_components/angular-touch/package.json",
+        "bower_components/angular/package.json",
+        "bower_components/bootstrap/package.json",
+        "package.json",
+        "public/lib/angular-animate/package.json",
+        "public/lib/angular-cookies/package.json",
+        "public/lib/angular-mocks/package.json",
+        "public/lib/angular-touch/package.json",
+        "public/lib/angular/package.json",
+        "public/lib/bootstrap/package.json"
+      ]
+    }
+  }
+}
